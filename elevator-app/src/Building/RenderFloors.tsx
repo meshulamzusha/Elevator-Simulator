@@ -2,14 +2,12 @@ import React from "react";
 import Floor from "./Floor.tsx";
 import './building.css'
 
-export default class Building {
+export default class RenderFloors {
     private numberOfFloors: number;
-    private numElevators: number;
     private floors: Floor[];
 
-    constructor(numFloors: number, numElevators: number) {
+    constructor(numFloors: number) {
         this.numberOfFloors = numFloors;
-        this.numElevators = numElevators;
         this.floors = [];
         this.buildABuilding();
     }
@@ -17,7 +15,7 @@ export default class Building {
     private buildABuilding() {
         for (let i = 0; i < this.numberOfFloors; i++) {
             const floorNumber = this.numberOfFloors - i - 1;
-            const newFloor = new Floor(`${floorNumber}`)
+            const newFloor = new Floor(floorNumber)
             this.floors.push(newFloor);
         }
     }
