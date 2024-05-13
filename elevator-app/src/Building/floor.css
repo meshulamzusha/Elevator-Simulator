@@ -9,7 +9,7 @@
 .floor {
   position: relative;
   width: 120px;
-  height: 110px;
+  /* height: 110px; */
   background-color: silver;
   background-image: linear-gradient(335deg, #b00 23px, transparent 23px), 
                     linear-gradient(155deg, #d00 23px, transparent 23px), 

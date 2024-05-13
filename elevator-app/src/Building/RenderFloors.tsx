@@ -1,35 +1,46 @@
-import React from "react";
-import Floor from "./Floor.tsx";
 import './building.css'
+import config from './projectConfig.ts'
+import React, { Component } from "react";
+import Floor from "./Floor.tsx";
 
-export default class RenderFloors {
-    private numberOfFloors: number;
-    private floors: Floor[];
+type RenderFloorsProps = {
+    onFloorButtonClick: (floorNumber: number) => void;
+};
 
-    constructor(numFloors: number) {
-        this.numberOfFloors = numFloors;
-        this.floors = [];
-        this.buildABuilding();
+type RenderFloorsState = {
+    floors: Floor[];
+};
+
+export default class RenderFloors extends Component<RenderFloorsProps, RenderFloorsState> {
+    constructor(props: RenderFloorsProps) {
+        super(props);
+        this.state = {
+            floors: [],
+        };
+        this.createFloors();
     }
 
-    private buildABuilding() {
-        for (let i = 0; i < this.numberOfFloors; i++) {
-            const floorNumber = this.numberOfFloors - i - 1;
-            const newFloor = new Floor(floorNumber)
-            this.floors.push(newFloor);
+    private createFloors(): void {
+        for (let i = 0; i < config.numberOfFloors; i++) {
+            const floorNumber = config.numberOfFloors - i - 1;
+            const newFloor = new Floor({ floorNumber: floorNumber, onClick: this.handleFloorClick });
+            this.state.floors.push(newFloor);
         }
     }
 
-    public render() {
+    private handleFloorClick = (floorNumber: number): void => {
+        this.props.onFloorButtonClick(floorNumber);
+    };
+
+    render() {
         return (
             <div className="building-container">
-                {this.floors.map((floor, index) => (
+                {this.state.floors.map((floor, index) => (
                     <div key={index}>
                         {floor.render()}
                     </div>
-                    ))
-                }
+                ))}
             </div>
-        )
+        );
     }
 }

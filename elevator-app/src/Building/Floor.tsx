@@ -1,19 +1,34 @@
-import React from 'react'
-import Button from './Button.tsx'
+import React, { Component, ReactNode } from 'react';
+import './floor.css';
+import config from './projectConfig.ts'
 
-export default class Floor {
-    private button: Button
+type FloorProps = {
+    floorNumber: number;
+    onClick: (floorNumber: number) => void;
+};
 
-    constructor(floorNum: string) {
-        this.button = new Button(floorNum)
+type FloorState = {
+};
+
+export default class Floor extends Component<FloorProps, FloorState> {
+    private floorHeight: number
+    constructor(props: FloorProps) {
+        super(props);
+        this.state = {
+        };
+        this.floorHeight = config.floorHeight
     }
 
-    public render() {
-        return(
-            <div className='floor'>{this.button.render()}
+    private handleClick = (): void => {
+        this.props.onClick(this.props.floorNumber);
+    };
+
+    public render(): ReactNode {
+        return (
+            <div className='floor' style={{height: `${this.floorHeight}px`}}>
+                <button className="metal linear" onClick={this.handleClick}>{`${this.props.floorNumber}`}</button>
                 <div className='blackline'></div>
             </div>
-        )
+        );
     }
-
 }

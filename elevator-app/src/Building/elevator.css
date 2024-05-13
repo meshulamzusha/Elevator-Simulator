@@ -1,5 +1,7 @@
-.elevator-image 
-{
-    height: 90px;
-    width: 60px;
+.elevators-container {
+  display: flex; 
+  position: fixed;
+  left: 120px;
+  bottom: 10px;
 }
+  
