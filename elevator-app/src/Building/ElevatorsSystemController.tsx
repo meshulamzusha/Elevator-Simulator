@@ -9,7 +9,7 @@ type BuildingSystemState = {
     elevatorsPositions: number[];
 };
 
-export default class ElevatorSystemControler extends Component<BuildingSystemProps, BuildingSystemState> {
+export default class ElevatorSystemController extends Component<BuildingSystemProps, BuildingSystemState> {
     private elevators: Elevators;
 
     constructor(props: BuildingSystemProps) {
