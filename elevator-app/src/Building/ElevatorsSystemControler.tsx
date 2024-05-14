@@ -21,13 +21,19 @@ export default class ElevatorSystemControler extends Component<BuildingSystemPro
     }
 
     private computeTheClosestElevator(floor: number): number {
-        const distancesList = Array(config.numberOfElevators)
+        
+        let closestElevator = -1;
+        let minDistance = Infinity;
+    
         for (let i = 0; i < config.numberOfElevators; i++) {
             const distance = Math.abs(floor - this.getCurrentFloor(i));
-            distancesList[i] = distance;
+            if (distance < minDistance && this.elevators.isElevatorAvailable(i)) {
+                minDistance = distance;
+                closestElevator = i;
+            }
         }
-        const nearestElevator = distancesList.indexOf(Math.min(...distancesList))
-        return nearestElevator
+    
+        return closestElevator;
     }
 
     private getCurrentFloor(elevatorId: number): number {

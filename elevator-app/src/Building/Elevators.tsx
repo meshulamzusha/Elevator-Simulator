@@ -39,6 +39,10 @@ export default class Elevators extends Component<{}, ElevatorState> {
         this.state.positions[elevatorId] = newPosition
     }; 
 
+    public isElevatorAvailable(elevatorId: number): boolean {
+        return this.state.floorsToMove[elevatorId] === 0;
+    };
+
     public render() {
         return (
             <div className="elevators-container">
