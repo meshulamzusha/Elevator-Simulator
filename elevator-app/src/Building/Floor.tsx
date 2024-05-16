@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import './floor.css';
+import './styles.css';
 import config from './projectConfig.ts'
 
 type FloorProps = {

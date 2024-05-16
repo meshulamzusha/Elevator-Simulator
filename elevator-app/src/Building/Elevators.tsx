@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import config from './projectConfig.ts'
-import './elevator.css';
+import './styles.css';
 
 type ElevatorState = {
     positions: number[];
@@ -47,14 +47,14 @@ export default class Elevators extends Component<{}, ElevatorState> {
         return (
             <div className="elevators-container">
         {[...Array(this.numberOfElevators)].map((_, index) => (
-          <div key={index} style={{ marginLeft: '10px' }}>
+          <div key={index}>
             <img
               src={require('./elv.jpg')}
               style={{
                 width: '60px',
                 height: `${this.floorHeight}px`, 
                 transform: `translateY(${this.state.positions[index]}px)`, 
-                transition: `transform calc(${this.secondsPerFloor}s * ${this.state.floorsToMove[index]}) ease-in-out`, 
+                transition: `transform calc(${this.secondsPerFloor}s * ${this.state.floorsToMove[index]}) linear`, 
                 }}
             />
           </div>

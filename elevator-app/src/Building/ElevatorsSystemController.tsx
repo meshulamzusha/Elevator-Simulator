@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Elevators from "./Elevators.tsx";
 import RenderFloors from "./RenderFloors.tsx";
 import config from './projectConfig.ts';
-import './elevator.css';
+import './styles.css';
 
 type BuildingSystemProps = {};
 type BuildingSystemState = {
@@ -58,9 +58,9 @@ export default class ElevatorSystemController extends Component<BuildingSystemPr
 
     render() {
         return (
-            <div>
-                {this.elevators.render()}
+            <div className="complet-building-container">
                 <RenderFloors onFloorButtonClick={this.handleFloorButtonClick} />
+                {this.elevators.render()}
             </div>
         );
     }

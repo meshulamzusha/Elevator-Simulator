@@ -1,4 +1,4 @@
-import './building.css'
+import './styles.css'
 import config from './projectConfig.ts'
 import React, { Component } from "react";
 import Floor from "./Floor.tsx";
