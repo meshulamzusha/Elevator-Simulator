@@ -23,24 +23,12 @@ export default class Elevators extends Component<{}, ElevatorState> {
         }
     }
 
-    public moveUp(elevatorId: number, targetFloor: number): void{
-        const newPosition = this.state.positions[elevatorId] - targetFloor * this.floorHeight;
-        const floorsToMove = Math.abs((this.state.positions[elevatorId] / this.floorHeight) - (newPosition / this.floorHeight));
-
-        this.state.floorsToMove[elevatorId] = floorsToMove
-        this.state.positions[elevatorId] = newPosition
-    };
-
-    public moveDown(elevatorId: number, targetFloor: number): void {
-        const newPosition = this.state.positions[elevatorId] + targetFloor * this.floorHeight;
-        const floorsToMove = Math.abs((this.state.positions[elevatorId] / this.floorHeight) - (newPosition / this.floorHeight));
-
-        this.state.floorsToMove[elevatorId] = floorsToMove
-        this.state.positions[elevatorId] = newPosition
-    }; 
-
-    public isElevatorAvailable(elevatorId: number): boolean {
-        return this.state.floorsToMove[elevatorId] === 0;
+    public move(elevatorId: number, targetFloor: number): void {
+      const newPosition = targetFloor * this.floorHeight;
+      const floorsToMove = Math.abs((this.state.positions[elevatorId] / this.floorHeight) - (newPosition / this.floorHeight));
+      console.log(newPosition / this.floorHeight)
+      this.state.positions[elevatorId] = newPosition;
+      this.state.floorsToMove[elevatorId] = floorsToMove;
     };
 
     public render() {
@@ -50,10 +38,11 @@ export default class Elevators extends Component<{}, ElevatorState> {
           <div key={index}>
             <img
               src={require('./elv.jpg')}
+              alt="elevator"
               style={{
                 width: '60px',
                 height: `${this.floorHeight}px`, 
-                transform: `translateY(${this.state.positions[index]}px)`, 
+                transform: `translateY(${-this.state.positions[index]}px)`, 
                 transition: `transform calc(${this.secondsPerFloor}s * ${this.state.floorsToMove[index]}) linear`, 
                 }}
             />
