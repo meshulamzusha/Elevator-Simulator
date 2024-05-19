@@ -26,7 +26,7 @@ export default class Elevators extends Component<{}, ElevatorState> {
     public move(elevatorId: number, targetFloor: number): void {
       const newPosition = targetFloor * this.floorHeight;
       const floorsToMove = Math.abs((this.state.positions[elevatorId] / this.floorHeight) - (newPosition / this.floorHeight));
-      console.log(newPosition / this.floorHeight)
+    
       this.state.positions[elevatorId] = newPosition;
       this.state.floorsToMove[elevatorId] = floorsToMove;
     };
