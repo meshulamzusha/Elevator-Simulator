@@ -65,6 +65,12 @@ export default class ElevatorSystemControlleraaa extends Component<BuildingSyste
     }
 
     private handleFloorButtonClick = (floorNumber: number): void => {
+
+        const existingElevator = this.state.elevatorsDetails.find(elevator => 
+            elevator.finalDestination === floorNumber);
+        if (existingElevator) {
+            return;
+        }
     
         const elevator = this.elevatorChoice(floorNumber);
     
