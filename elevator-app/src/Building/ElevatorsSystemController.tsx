@@ -6,55 +6,88 @@ import './styles.css';
 
 type BuildingSystemProps = {};
 type BuildingSystemState = {
-    elevatorsPositions: number[];
+    elevatorsDetails: {
+        finalDestination: number, 
+        availabilityTime: number
+    }[];
 };
 
-export default class ElevatorSystemController extends Component<BuildingSystemProps, BuildingSystemState> {
+export default class ElevatorSystemControlleraaa extends Component<BuildingSystemProps, BuildingSystemState> {
     private elevators: Elevators;
+    private interval: NodeJS.Timeout | null = null;
 
     constructor(props: BuildingSystemProps) {
         super(props);
         this.state = {
-            elevatorsPositions: Array(config.numberOfElevators).fill(0),
+            elevatorsDetails: Array(config.numberOfElevators).fill({
+                finalDestination: 0,
+                availabilityTime: 0
+            }),
         };
         this.elevators = new Elevators({});
     }
 
-    private computeTheClosestElevator(floor: number): number {
+    componentDidMount() {
+        this.interval = setInterval(this.updateAvailabilityTime, 500);
+    }
+
+    componentWillUnmount() {
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+    }
+
+    updateAvailabilityTime = () => {
+        this.setState(prevState => ({
+            elevatorsDetails: prevState.elevatorsDetails.map(elevator => ({
+                ...elevator,
+                availabilityTime: elevator.availabilityTime > 0 ? 
+                elevator.availabilityTime - 0.5 : 
+                elevator.availabilityTime
+            }))
+        }));
+    }
+
+    private elevatorChoice(floor: number): number {
         
         let closestElevator = -1;
-        let minDistance = Infinity;
+        let minTime = Infinity;
     
         for (let i = 0; i < config.numberOfElevators; i++) {
-            const distance = Math.abs(floor - this.getCurrentFloor(i));
-            if (distance < minDistance && this.elevators.isElevatorAvailable(i)) {
-                minDistance = distance;
+            const time = this.state.elevatorsDetails[i].availabilityTime;
+            const completeTime = time + Math.abs((floor - this.state.elevatorsDetails[i].finalDestination) * config.secondsPerFloor);
+            if (completeTime < minTime) {
+                minTime = completeTime;
                 closestElevator = i;
             }
         }
-    
         return closestElevator;
     }
 
-    private getCurrentFloor(elevatorId: number): number {
-        return this.state.elevatorsPositions[elevatorId];
-    }
-
     private handleFloorButtonClick = (floorNumber: number): void => {
-        const nearestElevator = this.computeTheClosestElevator(floorNumber)
-        const currentFloor = this.getCurrentFloor(nearestElevator);
-        const floorsToMove = Math.abs(floorNumber - currentFloor);
-
-        if (floorNumber > currentFloor) {
-            this.elevators.moveUp(nearestElevator,floorsToMove);
-        } else if (floorNumber < currentFloor) {
-            this.elevators.moveDown(nearestElevator,floorsToMove);
-        }
-
-        const updatedElevatorsPositions = [...this.state.elevatorsPositions];
-        updatedElevatorsPositions[nearestElevator] = floorNumber;
-        this.setState({ elevatorsPositions: updatedElevatorsPositions });
+    
+        const elevator = this.elevatorChoice(floorNumber);
+    
+        const floorsToMove = Math.abs(floorNumber - this.state.elevatorsDetails[elevator].finalDestination);  
+        const currentAvailabilityTime = this.state.elevatorsDetails[elevator].availabilityTime;   
+        const updateAvailabilityTime = currentAvailabilityTime + ((floorsToMove * config.secondsPerFloor) + 2);
+    
+        this.setState(prevState => {
+            const newElevatorsDetails = [...prevState.elevatorsDetails];
+            newElevatorsDetails[elevator] = {
+                ...newElevatorsDetails[elevator],
+                finalDestination: floorNumber,
+                availabilityTime: updateAvailabilityTime
+            };
+            return { elevatorsDetails: newElevatorsDetails };
+        });
+        
+        setTimeout(() => {
+            this.elevators.move(elevator, floorNumber) ;
+            
+        }, currentAvailabilityTime  * 1000)
     };
+        
 
     render() {
         return (
