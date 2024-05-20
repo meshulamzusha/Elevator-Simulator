@@ -37,7 +37,7 @@ export default class Elevators extends Component<{}, ElevatorState> {
         {[...Array(this.numberOfElevators)].map((_, index) => (
           <div key={index}>
             <img
-              src={require('./elv.jpg')}
+              src={'/elv.jpg'}
               alt="elevator"
               style={{
                 width: `calc(${this.floorHeight * 0.66}px)`,
