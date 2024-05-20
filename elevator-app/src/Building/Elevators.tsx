@@ -40,7 +40,7 @@ export default class Elevators extends Component<{}, ElevatorState> {
               src={require('./elv.jpg')}
               alt="elevator"
               style={{
-                width: '60px',
+                width: `calc(${this.floorHeight * 0.66}px)`,
                 height: `${this.floorHeight}px`, 
                 transform: `translateY(${-this.state.positions[index]}px)`, 
                 transition: `transform calc(${this.secondsPerFloor}s * ${this.state.floorsToMove[index]}) linear`, 
