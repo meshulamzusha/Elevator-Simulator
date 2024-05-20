@@ -13,7 +13,7 @@ type BuildingSystemState = {
     arrivalTimes: number[];
 };
 
-export default class ElevatorSystemController extends Component<BuildingSystemProps, BuildingSystemState> {
+export default class Building extends Component<BuildingSystemProps, BuildingSystemState> {
     private elevators: Elevators;
     private interval: NodeJS.Timeout | null = null;
 
