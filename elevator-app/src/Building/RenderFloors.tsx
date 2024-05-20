@@ -3,6 +3,9 @@ import config from './projectConfig.ts'
 import React, { Component } from "react";
 import Floor from "./Floor.tsx";
 
+// The Renderfloors class displays an amount of a floors
+// the class receives from the Building class a list of waiting times 
+// and gives each floor it renders its waiting time
 type RenderFloorsProps = {
     onFloorButtonClick: (floorNumber: number) => void;
     arrivalTimes: number[];
@@ -24,7 +27,8 @@ export default class RenderFloors extends Component<RenderFloorsProps, RenderFlo
             )),
         };
     }
-
+    // every time there is a change in the list of waiting times 
+    // Renderfloors re-renders the floors with the new waiting times
     componentDidUpdate(prevProps: RenderFloorsProps) {
         if (prevProps.arrivalTimes !== this.props.arrivalTimes) {
             this.setState({

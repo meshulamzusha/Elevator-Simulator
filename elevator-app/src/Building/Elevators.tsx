@@ -6,7 +6,8 @@ type ElevatorState = {
     positions: number[];
     floorsToMove: number[];
 };
-
+// the class displays a set of elevators The class has one method
+// to send a certain elevator to a certain floor
 export default class Elevators extends Component<{}, ElevatorState> {
     private floorHeight: number;
     private numberOfElevators: number;
@@ -22,7 +23,9 @@ export default class Elevators extends Component<{}, ElevatorState> {
             floorsToMove: Array(this.numberOfElevators).fill(0)
         }
     }
-
+    //move changes the position of the elevator in the state
+    //and in the style of the img tag 
+    // translateY() is activated to move the image to the new location
     public move(elevatorId: number, targetFloor: number): void {
       const newPosition = targetFloor * this.floorHeight;
       const floorsToMove = Math.abs((this.state.positions[elevatorId] / this.floorHeight) - (newPosition / this.floorHeight));

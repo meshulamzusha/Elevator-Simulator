@@ -4,6 +4,12 @@ import RenderFloors from "./RenderFloors.tsx";
 import config from './projectConfig.ts';
 import './styles.css';
 
+// The main class renders the other classes or uses with the other classes,
+// In Class Building is the logic for managing the dispatch of the elevators,
+// Building passes the function handleFloorButtonClick() as a prop to the RenderFloors class 
+// and RenderFloors passes the function as a prop to each Floor element it produces 
+// and thus the Floor class activates the function when the elevator call button is clicked
+
 type BuildingSystemProps = {};
 type BuildingSystemState = {
     elevatorsDetails: {
@@ -28,18 +34,20 @@ export default class Building extends Component<BuildingSystemProps, BuildingSys
         };
         this.elevators = new Elevators({});
     }
-
+    // activates a timer that goes down for every 'availabilityTime' of the elevators
+    // the timer runs in the background from the start of the component's life cycle
     componentDidMount() {
         this.interval = setInterval(this.updateAvailabilityTime, 500);
     }
-
+    // deletes the timer at the end of the component's life cycle
     componentWillUnmount() {
         if (this.interval) {
             clearInterval(this.interval);
         }
     }
-
-    updateAvailabilityTime = () => {
+    // the function subtracts half a second from availabilityTime 
+    // this function is activated every half a second
+    private updateAvailabilityTime = (): void => {
         this.setState(prevState => ({
             elevatorsDetails: prevState.elevatorsDetails.map(elevator => ({
                 ...elevator,
@@ -50,7 +58,8 @@ export default class Building extends Component<BuildingSystemProps, BuildingSys
         }));
     }
 
-    private elevatorChoice(floor: number): number {
+    // the function selects the elevator that will reach the requested floor the fastest
+    private elevatorChoice = (floor: number): number => {
         
         let closestElevator = -1;
         let minTime = Infinity;
@@ -67,7 +76,7 @@ export default class Building extends Component<BuildingSystemProps, BuildingSys
     }
 
     private handleFloorButtonClick = (floorNumber: number): void => {
-
+        // making sure there is no elevator on the way to the floor
         const existingElevator = this.state.elevatorsDetails.find(elevator => 
             elevator.finalDestination === floorNumber);
         if (existingElevator) {
@@ -76,10 +85,12 @@ export default class Building extends Component<BuildingSystemProps, BuildingSys
     
         const elevator = this.elevatorChoice(floorNumber);
     
+        // In this section, we update the state of the elevators and the arrivalTimes 
+        //that will be passed to the renderFloors class
         const floorsToMove = Math.abs(floorNumber - this.state.elevatorsDetails[elevator].finalDestination);  
         const currentAvailabilityTime = this.state.elevatorsDetails[elevator].availabilityTime;   
         const updateAvailabilityTime = currentAvailabilityTime + ((floorsToMove * config.secondsPerFloor) + 2);
-    
+        
         this.setState(prevState => {
             const updateElevatorsDetails = [...prevState.elevatorsDetails];
             updateElevatorsDetails[elevator] = {
@@ -94,7 +105,7 @@ export default class Building extends Component<BuildingSystemProps, BuildingSys
                 arrivalTimes: updateArrivalTimes 
             };
         });
-        
+        // the selected elevator is sent when the elevator becomes available
         setTimeout(() => {
             this.elevators.move(elevator, floorNumber) ;
         }, currentAvailabilityTime  * 1000)
