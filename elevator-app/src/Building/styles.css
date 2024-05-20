@@ -21,6 +21,27 @@
     background-color: #000000;
 }
 
+.floor-panel {
+    display: flex;
+}
+
+.timer {
+    background-color: #000000;
+    border: 2px solid rgb(253, 181, 12);
+    border-radius: 30%;
+    min-width: 35px;
+    max-height: 33px;
+    margin-top: 5%;
+    margin-right: 10px;
+}
+
+.timer-text {
+    color: rgb(253, 181, 12);
+    font-size: 20px;
+    font-weight: bold; 
+    padding: 15%;
+}
+
 .floor {
     position: relative;
     width: 120px;
