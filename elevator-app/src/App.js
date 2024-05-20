@@ -1,8 +1,12 @@
+import Building from "./Building/Building.tsx";
 
 
 function App() {
   return (
-    <div>
+    <div style={{display: 'flex', minHeight: '99vh'}}>
+      <Building/>
+      <Building/>
+      <Building/>
     </div>
   );
 }
