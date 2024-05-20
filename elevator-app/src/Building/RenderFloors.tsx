@@ -5,37 +5,43 @@ import Floor from "./Floor.tsx";
 
 type RenderFloorsProps = {
     onFloorButtonClick: (floorNumber: number) => void;
+    arrivalTimes: number[];
 };
 
 type RenderFloorsState = {
-    floors: Floor[];
+    floors: JSX.Element[];
 };
 
 export default class RenderFloors extends Component<RenderFloorsProps, RenderFloorsState> {
     constructor(props: RenderFloorsProps) {
         super(props);
         this.state = {
-            floors: [],
+            floors: Array.from({ length: config.numberOfFloors }, (_, index) => (
+                <Floor key={index} floorNumber={config.numberOfFloors - index - 1} 
+                    onClick={this.props.onFloorButtonClick}
+                    arrivalTimes={this.props.arrivalTimes[config.numberOfFloors - index - 1]}
+                />
+            )),
         };
-        this.createFloors();
     }
 
-    private createFloors(): void {
-        for (let i = 0; i < config.numberOfFloors; i++) {
-            const floorNumber = config.numberOfFloors - i - 1;
-            const newFloor = new Floor({ floorNumber: floorNumber, onClick: this.props.onFloorButtonClick });
-            this.state.floors.push(newFloor);
+    componentDidUpdate(prevProps: RenderFloorsProps) {
+        if (prevProps.arrivalTimes !== this.props.arrivalTimes) {
+            this.setState({
+                floors: Array.from({ length: config.numberOfFloors }, (_, index) => (
+                    <Floor key={index} floorNumber={config.numberOfFloors - index - 1} 
+                        onClick={this.props.onFloorButtonClick}
+                        arrivalTimes={this.props.arrivalTimes[config.numberOfFloors - index - 1]}
+                    />
+                )),
+            });
         }
     }
 
     render() {
         return (
             <div className="building-container">
-                {this.state.floors.map((floor, index) => (
-                    <div key={index}>
-                        {floor.render()}
-                    </div>
-                ))}
+                {this.state.floors}
             </div>
         );
     }

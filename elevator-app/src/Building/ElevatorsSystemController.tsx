@@ -10,9 +10,10 @@ type BuildingSystemState = {
         finalDestination: number, 
         availabilityTime: number
     }[];
+    arrivalTimes: number[];
 };
 
-export default class ElevatorSystemControlleraaa extends Component<BuildingSystemProps, BuildingSystemState> {
+export default class ElevatorSystemController extends Component<BuildingSystemProps, BuildingSystemState> {
     private elevators: Elevators;
     private interval: NodeJS.Timeout | null = null;
 
@@ -23,6 +24,7 @@ export default class ElevatorSystemControlleraaa extends Component<BuildingSyste
                 finalDestination: 0,
                 availabilityTime: 0
             }),
+            arrivalTimes: Array(config.numberOfFloors).fill(0),
         };
         this.elevators = new Elevators({});
     }
@@ -79,26 +81,32 @@ export default class ElevatorSystemControlleraaa extends Component<BuildingSyste
         const updateAvailabilityTime = currentAvailabilityTime + ((floorsToMove * config.secondsPerFloor) + 2);
     
         this.setState(prevState => {
-            const newElevatorsDetails = [...prevState.elevatorsDetails];
-            newElevatorsDetails[elevator] = {
-                ...newElevatorsDetails[elevator],
+            const updateElevatorsDetails = [...prevState.elevatorsDetails];
+            updateElevatorsDetails[elevator] = {
+                ...updateElevatorsDetails[elevator],
                 finalDestination: floorNumber,
                 availabilityTime: updateAvailabilityTime
             };
-            return { elevatorsDetails: newElevatorsDetails };
+            const updateArrivalTimes = [...prevState.arrivalTimes];
+            updateArrivalTimes[floorNumber] = updateAvailabilityTime - 1.5;
+            return { 
+                elevatorsDetails: updateElevatorsDetails,
+                arrivalTimes: updateArrivalTimes 
+            };
         });
         
         setTimeout(() => {
             this.elevators.move(elevator, floorNumber) ;
-            
         }, currentAvailabilityTime  * 1000)
     };
-        
 
     render() {
         return (
             <div className="complet-building-container">
-                <RenderFloors onFloorButtonClick={this.handleFloorButtonClick} />
+                <RenderFloors 
+                    onFloorButtonClick={this.handleFloorButtonClick} 
+                    arrivalTimes={this.state.arrivalTimes}
+                />
                 {this.elevators.render()}
             </div>
         );
